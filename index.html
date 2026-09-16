@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GH-900 Study Map</title>
+  <meta name="description" content="A focused study map for the GitHub Foundations GH-900 exam.">
+  <style>
+    :root {
+      --ink: #16251f;
+      --muted: #61716b;
+      --paper: #f5f7f2;
+      --panel: #ffffff;
+      --line: #dce5de;
+      --green: #1f7a5a;
+      --green-dark: #12553d;
+      --mint: #dff1e7;
+      --yellow: #f4c95d;
+      --coral: #e97b62;
+      --shadow: 0 18px 45px rgba(22, 37, 31, .08);
+      --radius: 14px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: Georgia, 'Times New Roman', serif;
+      line-height: 1.55;
+    }
+    a { color: inherit; }
+    button, input { font: inherit; }
+    .shell { width: min(1160px, calc(100% - 40px)); margin: 0 auto; }
+
+    header {
+      position: relative;
+      overflow: hidden;
+      padding: 24px 0 82px;
+      color: #f6fff9;
+      background: var(--green-dark);
+    }
+    header::after {
+      content: '';
+      position: absolute;
+      right: -90px;
+      bottom: -170px;
+      width: 430px;
+      height: 430px;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 50%;
+      box-shadow: 0 0 0 44px rgba(255,255,255,.04), 0 0 0 88px rgba(255,255,255,.03);
+    }
+    nav { display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 1; }
+    .brand { font: 700 1rem 'Trebuchet MS', sans-serif; letter-spacing: .08em; text-transform: uppercase; }
+    .nav-link { text-decoration: none; font: 700 .88rem 'Trebuchet MS', sans-serif; color: #cbe8d8; }
+    .hero { position: relative; z-index: 1; display: grid; grid-template-columns: 1.25fr .75fr; gap: 50px; align-items: end; padding-top: 76px; }
+    .eyebrow { color: var(--yellow); font: 700 .78rem 'Trebuchet MS', sans-serif; letter-spacing: .14em; text-transform: uppercase; }
+    h1, h2, h3 { margin: 0; line-height: 1.08; }
+    h1 { max-width: 700px; margin-top: 12px; font-size: clamp(3rem, 7vw, 6.25rem); letter-spacing: -.055em; }
+    .hero-copy { max-width: 570px; margin: 22px 0 0; color: #cbe8d8; font-size: 1.14rem; }
+    .hero-note { align-self: center; padding: 22px; border: 1px solid rgba(255,255,255,.2); border-radius: var(--radius); background: rgba(255,255,255,.08); }
+    .hero-note strong { display: block; margin-bottom: 6px; color: var(--yellow); font: 700 .78rem 'Trebuchet MS', sans-serif; letter-spacing: .12em; text-transform: uppercase; }
+    .hero-note p { margin: 0; color: #eef8f0; }
+
+    main { padding: 0 0 90px; }
+    .overview { display: grid; grid-template-columns: 1.3fr .7fr; gap: 24px; margin-top: -42px; position: relative; z-index: 2; }
+    .progress-panel, .score-panel, .topic, .exam-panel { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
+    .progress-panel { padding: 26px; }
+    .section-kicker { color: var(--green); font: 700 .75rem 'Trebuchet MS', sans-serif; letter-spacing: .12em; text-transform: uppercase; }
+    .progress-row { display: flex; align-items: baseline; justify-content: space-between; gap: 20px; margin: 10px 0 14px; }
+    .progress-row h2 { font-size: 1.8rem; }
+    #progressText { color: var(--green); font: 700 1.8rem 'Trebuchet MS', sans-serif; }
+    .bar { height: 10px; overflow: hidden; border-radius: 99px; background: #e5eee7; }
+    #progressBar { width: 0%; height: 100%; border-radius: inherit; background: var(--green); transition: width .3s ease; }
+    .progress-meta { display: flex; justify-content: space-between; margin-top: 9px; color: var(--muted); font-size: .9rem; }
+    .score-panel { display: flex; flex-direction: column; justify-content: space-between; padding: 26px; background: var(--yellow); }
+    .score-panel h2 { max-width: 210px; font-size: 1.65rem; }
+    .score-panel p { margin: 14px 0 0; color: #5f4b14; }
+
+    .content { padding-top: 64px; }
+    .content-head { display: flex; justify-content: space-between; align-items: end; gap: 20px; margin-bottom: 24px; }
+    .content-head h2 { font-size: clamp(2rem, 4vw, 3.25rem); letter-spacing: -.04em; }
+    .search { width: min(300px, 100%); padding: 11px 14px; border: 1px solid var(--line); border-radius: 8px; outline: none; background: white; color: var(--ink); }
+    .search:focus { border-color: var(--green); box-shadow: 0 0 0 3px var(--mint); }
+    .topics { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .topic { padding: 24px; box-shadow: none; transition: transform .2s ease, border-color .2s ease; }
+    .topic:hover { transform: translateY(-3px); border-color: #aacbb8; }
+    .topic-link { display: block; color: inherit; text-decoration: none; }
+    .topic-top { display: flex; justify-content: space-between; gap: 15px; align-items: start; }
+    .number { display: grid; flex: 0 0 34px; height: 34px; place-items: center; border-radius: 50%; color: white; background: var(--green); font: 700 .88rem 'Trebuchet MS', sans-serif; }
+    .topic h3 { flex: 1; font-size: 1.5rem; }
+    .topic p { margin: 13px 0 18px; color: var(--muted); }
+    .topic ul { display: grid; gap: 9px; padding: 0; margin: 0; list-style: none; }
+    .topic li { padding-left: 22px; position: relative; }
+    .topic li::before { content: ''; position: absolute; top: .65em; left: 1px; width: 8px; height: 8px; border-radius: 50%; background: var(--coral); }
+    .topic strong { color: var(--green-dark); }
+    .topic[data-hidden="true"] { display: none; }
+
+    .bottom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 24px; }
+    .exam-panel { padding: 28px; box-shadow: none; }
+    .exam-panel.green { color: #effaf2; background: var(--green); border-color: var(--green); }
+    .exam-panel h2 { margin-bottom: 14px; font-size: 2rem; }
+    .exam-panel p { margin: 0 0 16px; }
+    .checklist { display: grid; gap: 10px; padding: 0; margin: 0; list-style: none; }
+    .checklist label { display: flex; gap: 10px; align-items: start; cursor: pointer; }
+    .checklist input { width: 18px; height: 18px; margin-top: 4px; accent-color: var(--green); }
+    .green .checklist input { accent-color: var(--yellow); }
+    .tip { padding: 13px 15px; margin-top: 18px; border-left: 4px solid var(--yellow); color: #5f4b14; background: #fff7dc; }
+    footer { padding: 25px 0 35px; border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem; }
+
+    @media (max-width: 760px) {
+      .shell { width: min(100% - 28px, 600px); }
+      header { padding-bottom: 70px; }
+      .hero, .overview, .topics, .bottom-grid { grid-template-columns: 1fr; }
+      .hero { gap: 30px; padding-top: 55px; }
+      .hero-note { max-width: 430px; }
+      .overview { margin-top: -32px; }
+      .content-head { display: block; }
+      .search { margin-top: 16px; width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="shell">
+      <nav aria-label="Primary navigation">
+        <div class="brand">GH-900 / GitHub Foundations</div>
+        <a class="nav-link" href="#topics">Study map &darr;</a>
+      </nav>
+      <div class="hero">
+        <div>
+          <div class="eyebrow">A practical revision guide</div>
+          <h1>Know the work behind the code.</h1>
+          <p class="hero-copy">A calm, structured path through the GitHub concepts, collaboration habits, and security basics that matter for the GH-900 exam.</p>
+        </div>
+        <aside class="hero-note">
+          <strong>How to use this page</strong>
+          <p>Move through the topics, check off the concepts you can explain, then use the final checklist as your last review.</p>
+        </aside>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="shell">
+      <section class="overview" aria-label="Study progress">
+        <div class="progress-panel">
+          <div class="section-kicker">Your revision pulse</div>
+          <div class="progress-row"><h2>Concepts checked</h2><span id="progressText">0%</span></div>
+          <div class="bar" aria-label="Study progress"><div id="progressBar"></div></div>
+          <div class="progress-meta"><span id="progressCount">0 of 12 complete</span><span>Keep it explainable.</span></div>
+        </div>
+        <div class="score-panel">
+          <h2>Build a mental model, not a vocabulary list.</h2>
+          <p>For every term, ask: what problem does it solve, who uses it, and where does it fit in the workflow?</p>
+        </div>
+      </section>
+
+      <section class="content" id="topics">
+        <div class="content-head">
+          <div>
+            <div class="section-kicker">The study map</div>
+            <h2>Six areas to make familiar</h2>
+          </div>
+          <label><span class="sr-only">Filter topics</span><input class="search" id="search" type="search" placeholder="Filter topics or terms..." aria-label="Filter topics or terms"></label>
+        </div>
+
+        <div class="topics">
+          <article class="topic" data-search="github git basics version control repository commit clone pull push"><a class="topic-link" href="sections/git-basics/index.html">
+            <div class="topic-top"><span class="number">01</span><h3>Git and GitHub basics</h3></div>
+            <p>Understand the difference between the Git version control system and GitHub, the collaboration platform around it.</p>
+            <ul><li><strong>Know:</strong> repositories, commits, branches, remotes, clone, pull, push</li><li><strong>Explain:</strong> how Git tracks changes over time</li></ul>
+          </a></article>
+          <article class="topic" data-search="repository profile organization visibility public private fork readme license notification"><a class="topic-link" href="sections/repositories/index.html">
+            <div class="topic-top"><span class="number">02</span><h3>Repositories and structure</h3></div>
+            <p>See a repository as the home for code, history, documentation, issues, and contribution context.</p>
+            <ul><li><strong>Compare:</strong> public and private repositories, accounts and organizations</li><li><strong>Know:</strong> README files, licenses, .gitignore, forks, stars, watchers</li></ul>
+          </a></article>
+          <article class="topic" data-search="branch github flow pull request merge conflict collaboration review"><a class="topic-link" href="sections/branches-and-flow/index.html">
+            <div class="topic-top"><span class="number">03</span><h3>Branches and GitHub flow</h3></div>
+            <p>Practice the lightweight workflow that keeps changes isolated, visible, and easy to discuss.</p>
+            <ul><li><strong>Sequence:</strong> branch, make changes, commit, open a pull request, review, merge</li><li><strong>Handle:</strong> merge conflicts and branch protection expectations</li></ul>
+          </a></article>
+          <article class="topic" data-search="issues pull request project planning labels milestones discussion collaboration code review"><a class="topic-link" href="sections/planning-collaboration/index.html">
+            <div class="topic-top"><span class="number">04</span><h3>Planning and collaboration</h3></div>
+            <p>Learn how teams turn conversation into visible, trackable work on GitHub.</p>
+            <ul><li><strong>Use:</strong> issues, labels, milestones, discussions, and Projects</li><li><strong>Review:</strong> pull request comments, suggested changes, approvals, and conversations</li></ul>
+          </a></article>
+          <article class="topic" data-search="actions automation workflow event job runner yaml ci cd github action artifact"><a class="topic-link" href="sections/actions/index.html">
+            <div class="topic-top"><span class="number">05</span><h3>Automation with Actions</h3></div>
+            <p>Get comfortable with the building blocks of GitHub Actions and the reasons teams automate.</p>
+            <ul><li><strong>Know:</strong> workflows, events, jobs, steps, actions, and runners</li><li><strong>Connect:</strong> continuous integration, tests, builds, deployments, and artifacts</li></ul>
+          </a></article>
+          <article class="topic" data-search="security permissions authentication authorization secret dependency security code scanning dependabot permissions"><a class="topic-link" href="sections/security/index.html">
+            <div class="topic-top"><span class="number">06</span><h3>Security and responsible use</h3></div>
+            <p>Recognize the controls that protect code, credentials, dependencies, and the people contributing.</p>
+            <ul><li><strong>Distinguish:</strong> authentication, authorization, roles, and least privilege</li><li><strong>Know:</strong> secret scanning, Dependabot, code scanning, 2FA, and secure secrets</li></ul>
+          </a></article>
+        </div>
+      </section>
+
+      <section class="bottom-grid" aria-label="Final review">
+        <div class="exam-panel">
+          <div class="section-kicker">Final review</div>
+          <h2>Can you say it plainly?</h2>
+          <p>Use these prompts without looking anything up. A clear answer is a better signal than recognition.</p>
+          <ul class="checklist">
+            <li><label><input type="checkbox"> I can describe a commit, branch, merge, and pull request.</label></li>
+            <li><label><input type="checkbox"> I can explain a basic GitHub flow from issue to merged change.</label></li>
+            <li><label><input type="checkbox"> I can choose between an issue, discussion, project item, and pull request.</label></li>
+            <li><label><input type="checkbox"> I can describe what a GitHub Actions workflow does.</label></li>
+            <li><label><input type="checkbox"> I can name practical ways to protect secrets and dependencies.</label></li>
+            <li><label><input type="checkbox"> I have checked the current official exam objectives.</label></li>
+          </ul>
+        </div>
+        <div class="exam-panel green">
+          <div class="section-kicker" style="color: #f4c95d;">Exam-day lens</div>
+          <h2>Think in trade-offs.</h2>
+          <p>Many foundation questions test whether you can select the right collaboration or security tool for a situation.</p>
+          <div class="tip"><strong>Last pass:</strong> practice explaining why an option fits, not just what the option is called.</div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer><div class="shell">GH-900 Study Map &middot; Use the official Microsoft Learn and GitHub documentation for the current exam scope.</div></footer>
+
+  <script>
+    const checks = [...document.querySelectorAll('.checklist input')];
+    const progressBar = document.querySelector('#progressBar');
+    const progressText = document.querySelector('#progressText');
+    const progressCount = document.querySelector('#progressCount');
+    const search = document.querySelector('#search');
+    const topics = [...document.querySelectorAll('.topic')];
+
+    function updateProgress() {
+      const complete = checks.filter((check) => check.checked).length;
+      const percent = Math.round((complete / checks.length) * 100);
+      progressBar.style.width = percent + '%';
+      progressText.textContent = percent + '%';
+      progressCount.textContent = complete + ' of ' + checks.length + ' complete';
+      localStorage.setItem('gh900-progress', JSON.stringify(checks.map((check) => check.checked)));
+    }
+
+    const saved = JSON.parse(localStorage.getItem('gh900-progress') || '[]');
+    checks.forEach((check, index) => { check.checked = saved[index] === true; check.addEventListener('change', updateProgress); });
+    updateProgress();
+
+    search.addEventListener('input', () => {
+      const query = search.value.trim().toLowerCase();
+      topics.forEach((topic) => { topic.dataset.hidden = query && !topic.dataset.search.includes(query) ? 'true' : 'false'; });
+    });
+  </script>
+</body>
+</html>
